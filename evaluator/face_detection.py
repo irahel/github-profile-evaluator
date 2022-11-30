@@ -14,7 +14,7 @@ class FaceDetector:
             "haarcascade_eye.xml",
         ]
         for cascade in cascades:
-            frontal = cv2.CascadeClassifier("evaluator/" + cascade)
+            frontal = cv2.CascadeClassifier(f"evaluator/{cascade}")
 
             image = cv2.imread(path)
 

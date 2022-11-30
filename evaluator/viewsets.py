@@ -23,7 +23,7 @@ class GradeViewSet(viewsets.ModelViewSet):
                 .order_by("-evaluation_date")
             )
 
-            refresh = True if request.query_params["refresh"] == "true" else False
+            refresh = request.query_params["refresh"] == "true"
 
             if len(queryset) > 0:
                 queryset = queryset[0]
@@ -39,7 +39,6 @@ class GradeViewSet(viewsets.ModelViewSet):
                     single_evaluation(populate_dict(single_fetch_content(user)))
                 )
             serializer = GradeSerializer(queryset)
-            return Response(serializer.data)
         else:
             if len(MedianGrade.objects.all()) == 0:
                 median = MedianGrade(
@@ -49,7 +48,7 @@ class GradeViewSet(viewsets.ModelViewSet):
             else:
                 median = MedianGrade.objects.all()[0]
 
-                refresh = True if request.query_params["refresh"] == "true" else False
+                refresh = request.query_params["refresh"] == "true"
 
                 if date.today() - median.update_date > timedelta(days=1) or refresh:
                     median.median_grade = get_median(
@@ -57,4 +56,5 @@ class GradeViewSet(viewsets.ModelViewSet):
                     )
                     median.save()
             serializer = MedianSerializer(median)
-            return Response(serializer.data)
+
+        return Response(serializer.data)

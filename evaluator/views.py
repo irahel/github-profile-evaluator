@@ -48,7 +48,7 @@ def group_index(request):
         if request.FILES["file"]._name.endswith("csv"):
             csv_object = GroupCSV(file=request.FILES["file"])
             csv_object.save()
-            csv_list = csv_to_list("media/" + csv_object.file.name)
+            csv_list = csv_to_list(f"media/{csv_object.file.name}")
             if not check_usernamekey_in_csv(csv_object, csv_list):
                 request.session[
                     "erro"
@@ -90,7 +90,7 @@ def new_index(request):
     if request.method == "GET" and "github_user" in request.GET:
         refresh = False
         if "refresh" in request.GET:
-            refresh = True if request.GET["refresh"].lower() == "true" else False
+            refresh = request.GET["refresh"].lower() == "true"
         user = request.GET["github_user"]
         eval = (
             Evaluation.objects.all()
@@ -126,12 +126,14 @@ def new_index(request):
             populate_dict(single_fetch_content(request.POST["github_user"]))
         )
 
-        if not eval_dict["github"]:
-            return JsonResponse(
-                {"status": "false", "message": "precondition failed"}, status=412
+        return (
+            JsonResponse(serialize_eval(new_evaluation(eval_dict)), status=201)
+            if eval_dict["github"]
+            else JsonResponse(
+                {"status": "false", "message": "precondition failed"},
+                status=412,
             )
-
-        return JsonResponse(serialize_eval(new_evaluation(eval_dict)), status=201)
+        )
 
     else:
         return JsonResponse(

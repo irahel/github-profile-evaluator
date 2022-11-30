@@ -179,12 +179,9 @@ def export_file(type: str, uuid: str):
                 "0 pontos",
             ]
 
-        data.append(pergunta1)
-        data.append(pergunta2)
-        data.append(pergunta3)
-        data.append(pergunta4)
-        data.append(pergunta5)
-        data.append(pergunta6)
+        data.extend((pergunta1, pergunta2))
+        data.extend((pergunta3, pergunta4))
+        data.extend((pergunta5, pergunta6))
         data.append(pergunta7)
         data.append(pergunta8)
         data.append(pergunta9)

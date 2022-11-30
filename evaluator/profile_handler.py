@@ -48,8 +48,8 @@ def has_email(sidebar, readme):
         "@icloud.com",
     ]
 
-    in_readme = any([email in str(readme).lower() for email in providers])
-    in_sidebar = any([email in str(sidebar).lower() for email in providers])
+    in_readme = any(email in str(readme).lower() for email in providers)
+    in_sidebar = any(email in str(sidebar).lower() for email in providers)
 
     return in_sidebar or in_readme
 

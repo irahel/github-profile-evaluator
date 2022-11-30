@@ -1,8 +1,5 @@
 def get_readme(selector):
-    if not selector:
-        return None
-    readme = selector.css("article.markdown-body").get()
-    return readme
+    return selector.css("article.markdown-body").get() if selector else None
 
 
 def get_tags(selector):
@@ -49,10 +46,4 @@ def get_tags(selector):
         "js",
     ]
 
-    stack_counter = 0
-
-    for stack in stacks:
-        if stack in selector.get().lower():
-            stack_counter += 1
-
-    return stack_counter
+    return sum(stack in selector.get().lower() for stack in stacks)
